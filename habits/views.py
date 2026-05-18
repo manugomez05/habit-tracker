@@ -13,7 +13,7 @@ def persona(request):
     }
     return HttpResponse(template.render(context,request))
 
-def crearPersona(request):
+def crear_persona(request):
     if request.method == 'POST':
 
         form = PersonaForm(request.POST)
@@ -24,7 +24,9 @@ def crearPersona(request):
 
         form = PersonaForm()
         context = {'form':form}
-    return render(request, 'habits/crear_persona.html', context)
+
+    return render(request, 'crear_persona.html', context)
+
 
 
 def modificarPersona(request,id):
@@ -39,3 +41,4 @@ def modificarPersona(request,id):
         form = PersonaForm(instance=persona)
         context = {'form': form}
     return render(request, 'modificar_persona.html', context)
+
