@@ -1,5 +1,5 @@
 from django import forms
-from .models import Persona
+from .models import Persona, Grupo
 
 class PersonaForm(forms.ModelForm):
     class Meta:
@@ -9,4 +9,18 @@ class PersonaForm(forms.ModelForm):
             'nombre',
             'apellido',
             'documento'
+        ]
+
+class GrupoForm(forms.ModelForm):
+    miembros = forms.ModelMultipleChoiceField(
+        queryset=Persona.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+    class Meta:
+        model = Grupo
+        fields = [
+            'nombre',
+            'miembros'
         ]

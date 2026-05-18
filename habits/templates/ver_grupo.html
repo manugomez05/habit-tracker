@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo {{ grupo.nombre }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; padding: 0; color: #333; }
+        .page { max-width: 760px; margin: 32px auto; padding: 24px; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-radius: 12px; }
+        .button { display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; background: #2563eb; color: white; text-decoration: none; cursor: pointer; margin-right: 8px; }
+        .button.light { background: #e5e7eb; color: #111827; }
+        h1, h2 { margin-top: 0; }
+        .card { padding: 18px 20px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; margin-bottom: 20px; }
+        .member-list { list-style: none; padding: 0; margin: 0; }
+        .member-list li { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
+        .member-list li:last-child { border-bottom: none; }
+        .empty { color: #6b7280; }
+    </style>
+</head>
+<body>
+    <section class="page">
+        <h1>Grupo: {{ grupo.nombre }}</h1>
+        <div class="card">
+            <h2>Miembros</h2>
+            <ul class="member-list">
+                {% for miembro in grupo.miembros.all %}
+                    <li>{{ miembro.nombre }} {{ miembro.apellido }}</li>
+                {% empty %}
+                    <li class="empty">Este grupo no tiene miembros.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <a class="button light" href="{% url 'lista_grupos' %}">Volver a la lista</a>
+            <a class="button" href="{% url 'modificarGrupo' grupo.id %}">Editar</a>
+            <a class="button light" href="{% url 'eliminarGrupo' grupo.id %}">Eliminar</a>
+        </div>
+    </section>
+</body>
+</html>

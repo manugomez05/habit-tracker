@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eliminar Persona</title>
+    <title>Eliminar Grupo</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; padding: 0; color: #333; }
         .page { max-width: 600px; margin: 32px auto; padding: 24px; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-radius: 12px; }
-        h1 { margin-top: 0; }
-        .buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
         .button { display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; }
         .button.danger { background: #dc2626; color: white; }
         .button.light { background: #e5e7eb; color: #111827; text-decoration: none; }
+        .buttons { display: flex; gap: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
     <section class="page">
-        <h1>Eliminar Persona</h1>
-        <p>¿Estás seguro de que quieres eliminar a <strong>{{ persona.nombre }} {{ persona.apellido }}</strong>?</p>
+        <h1>Eliminar Grupo</h1>
+        <p>¿Estás seguro de que quieres eliminar el grupo <strong>{{ grupo.nombre }}</strong>?</p>
         <form method="POST">
             {% csrf_token %}
             <div class="buttons">
                 <button class="button danger" type="submit">Sí, eliminar</button>
-                <a class="button light" href="{% url 'lista_personas' %}">Cancelar</a>
+                <a class="button light" href="{% url 'lista_grupos' %}">Cancelar</a>
             </div>
         </form>
     </section>
