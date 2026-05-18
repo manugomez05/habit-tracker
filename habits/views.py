@@ -42,3 +42,12 @@ def modificarPersona(request,id):
         context = {'form': form}
     return render(request, 'modificar_persona.html', context)
 
+def eliminarPersona(request, id):
+    persona = Persona.objects.get(id=id)
+    if request.method == 'POST':
+        persona.delete()
+        return redirect('lista_personas')
+    else:
+        context = {'persona': persona}
+        return render(request, 'eliminar_persona.html', context)
+

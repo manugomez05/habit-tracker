@@ -7,8 +7,17 @@
 <ul>
   {% for x in personas %}
     <li> {{x.id}} -{{ x.nombre }} {{ x.apellido }}</li>
+     <a href="{% url 'modificarPersona' x.id %}">
+        <button>Modificar</button>
+    </a>
+    <a href="{% url 'eliminarPersona' x.id %}">
+        <button>Eliminar</button>
+    </a>
   {% endfor %}
 </ul>
+<a href="{% url 'crear_persona' %}">
+    <button>Crear Persona</button>
+</a>
 
 </body>
 </html>
