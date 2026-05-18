@@ -25,3 +25,17 @@ def crearPersona(request):
         form = PersonaForm()
         context = {'form':form}
     return render(request, 'habits/crear_persona.html', context)
+
+
+def modificarPersona(request,id):
+    persona= Persona.objects.get(id=id)
+    if request.method == 'POST':
+        form = PersonaForm(request.POST, instance=persona)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_personas')
+
+    else:
+        form = PersonaForm(instance=persona)
+        context = {'form': form}
+    return render(request, 'modificar_persona.html', context)
