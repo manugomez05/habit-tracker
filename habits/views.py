@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from .models import Tarea, Persona, Grupo
 from django.shortcuts import redirect,render
 from .forms import TareaForm, PersonaForm, GrupoForm
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import PersonaSerializer
 
 # Create your views here.
 def persona(request):
@@ -16,7 +19,6 @@ def persona(request):
 def verPersona(request, id):
     persona_obj = Persona.objects.get(id=id)
     return render(request, 'ver_persona.html', {'persona': persona_obj})
-
 
 def crearPersona(request):
     if request.method == 'POST':
@@ -142,3 +144,14 @@ def eliminarTarea(request, id):
         context = {'tarea': tarea}
         return render(request, 'eliminar_tarea.html', context)
     
+@api_view(['GET'])
+def api_personas(request):
+
+    personas = Persona.objects.all()
+
+    serializer = PersonaSerializer(
+        personas,
+        many=True
+    )
+
+    return Response(serializer.data)

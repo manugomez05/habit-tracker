@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import persona, grupo, tareas
+from .views import api_personas, persona, grupo, tareas
 from . import views
 
 urlpatterns = [
@@ -19,5 +19,7 @@ urlpatterns = [
     path('crear_tarea/', views.crearTarea, name='crearTarea'),
     path('modificar_tarea/<int:id>/', views.modificarTarea, name='modificarTarea'),
     path('eliminar_tarea/<int:id>/', views.eliminarTarea, name='eliminarTarea'),
+    path('api/personas/',api_personas,name='api_personas',
+),
 ]
 
