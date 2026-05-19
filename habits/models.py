@@ -16,10 +16,10 @@ class Grupo(models.Model):
 
     def __str__(self):
         return self.nombre
-class Habitos(models.Model):
+class Tarea(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField(blank=True)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
 
 

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Persona, Grupo
+from .models import Persona, Grupo, Tarea
 
 class PersonaForm(forms.ModelForm):
     class Meta:
@@ -23,4 +23,14 @@ class GrupoForm(forms.ModelForm):
         fields = [
             'nombre',
             'miembros'
+        ]
+
+class TareaForm(forms.ModelForm):
+    class Meta:
+        model = Tarea
+        fields = [
+            'titulo',
+            'descripcion',
+            
+            'grupo'
         ]

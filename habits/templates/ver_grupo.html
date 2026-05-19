@@ -30,6 +30,19 @@
                 {% endfor %}
             </ul>
         </div>
+        <div class="card">
+            <h2>Tareas</h2>
+            <ul class="member-list">
+                {% for tarea in grupo.tarea_set.all %}
+                    <li>
+                        <strong>{{ tarea.titulo }}</strong>
+                        {% if tarea.descripcion %}<br><small>{{ tarea.descripcion|truncatewords:20 }}</small>{% endif %}
+                    </li>
+                {% empty %}
+                    <li class="empty">Este grupo no tiene tareas asignadas.</li>
+                {% endfor %}
+            </ul>
+        </div>
         <div>
             <a class="button light" href="{% url 'lista_grupos' %}">Volver a la lista</a>
             <a class="button" href="{% url 'modificarGrupo' grupo.id %}">Editar</a>
