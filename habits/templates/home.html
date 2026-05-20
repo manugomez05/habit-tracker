@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | Habit Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; padding: 0; color: #333; }
+        .page { max-width: 1100px; margin: 32px auto; padding: 24px; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-radius: 12px; }
+        .header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+        .section { margin-bottom: 32px; }
+        .section h2 { margin-bottom: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 14px; padding: 20px; }
+        .card h3 { margin-top: 0; }
+        .card ul { list-style: none; padding: 0; margin: 0; }
+        .card li { padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
+        .card li:last-child { border-bottom: none; }
+        .empty { color: #6b7280; }
+        .button { display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; background: #2563eb; color: white; text-decoration: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <section class="page">
+        <div class="header">
+            <div>
+                <h1>Inicio</h1>
+                <p>Resumen de personas, grupos y tareas.</p>
+            </div>
+           
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Personas</h3>
+                 <a class="button" href="{% url 'lista_personas' %}">Ver Personas</a>
+                <ul>
+                    {% for persona in personas %}
+                        <li>#{{ persona.id }} · {{ persona.nombre }} {{ persona.apellido }}</li>
+                    {% empty %}
+                        <li class="empty">No hay personas registradas.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Grupos</h3>
+                 <a class="button" href="{% url 'lista_grupos' %}">Ver Grupos</a>
+                <ul>
+                    {% for grupo in grupos %}
+                        <li>#{{ grupo.id }} · {{ grupo.nombre }}</li>
+                    {% empty %}
+                        <li class="empty">No hay grupos creados.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Tareas</h3>
+                <a class="button" href="{% url 'lista_tareas' %}">Ver Tareas</a>
+                <ul>
+                    {% for tarea in tareas %}
+                        <li>#{{ tarea.id }} · {{ tarea.titulo }}</li>
+                    {% empty %}
+                        <li class="empty">No hay tareas creadas.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

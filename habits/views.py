@@ -1,13 +1,23 @@
 from django.template import loader
 from django.http import HttpResponse
 from .models import Tarea, Persona, Grupo
-from django.shortcuts import redirect,render
+from django.shortcuts import redirect, render, get_object_or_404
 from .forms import TareaForm, PersonaForm, GrupoForm
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializers import PersonaSerializer
+from .serializers import PersonaSerializer, GrupoSerializer, TareaSerializer
 
 # Create your views here.
+def home(request):
+    personas = Persona.objects.all()
+    grupos = Grupo.objects.all()
+    tareas = Tarea.objects.all()
+    return render(request, 'home.html', {
+        'personas': personas,
+        'grupos': grupos,
+        'tareas': tareas,
+    })
+
 def persona(request):
     personas = Persona.objects.all()
     template = loader.get_template('persona.html')
@@ -155,3 +165,93 @@ def api_personas(request):
     )
 
     return Response(serializer.data)
+
+@api_view(['POST'])
+def api_crear_persona(request):
+
+    serializer = PersonaSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201) #201 Corresponde a created.
+
+    return Response(serializer.errors, status=400) #400 Corresponde a bad request (datos incorrectos).
+
+@api_view(['PUT'])
+def api_modificar_persona(request, id):
+    persona = Persona.objects.get(id=id)
+    serializer = PersonaSerializer(persona, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+@api_view(['DELETE'])
+def api_eliminar_persona(request, id):
+    persona = Persona.objects.get(id=id)
+    persona.delete()
+    return Response(status=204) #204 Corresponde a no content (eliminado correctamente).
+
+@api_view(['GET'])
+def api_grupo(request):
+    grupo = Grupo.objects.all()
+    serializer = GrupoSerializer (
+        grupo, 
+        many = True
+    )
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def api_crear_grupo(request):
+    serializer = GrupoSerializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['PUT'])
+def api_modificar_grupo(request,id):
+    grupo = Grupo.objects.get(id=id)
+    serializer = GrupoSerializer(grupo, data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+@api_view(['DELETE'])
+def api_eliminar_grupo(request,id):
+    grupo = Grupo.objects.get(id=id)
+    grupo.delete()
+    return Response(status=204)
+ 
+@api_view(['GET', 'POST'])
+def api_tareas(request):
+    if request.method == 'GET':
+        tareas = Tarea.objects.all()
+        serializer = TareaSerializer(tareas, many=True)
+        return Response(serializer.data)
+
+    serializer = TareaSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def api_tarea_detail(request, id):
+    tarea = get_object_or_404(Tarea, id=id)
+
+    if request.method == 'GET':
+        serializer = TareaSerializer(tarea)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = TareaSerializer(tarea, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    tarea.delete()
+    return Response(status=204)
+

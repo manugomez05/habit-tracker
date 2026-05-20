@@ -3,7 +3,7 @@ from .views import api_personas, persona, grupo, tareas
 from . import views
 
 urlpatterns = [
-    path('',persona),
+    path('', views.home, name='home'),
     path('personas/',persona, name='lista_personas'),
     path('personas/<int:id>/', views.verPersona, name='verPersona'),
     path('modificar_persona/<int:id>/', views.modificarPersona, name='modificarPersona'),
@@ -19,7 +19,12 @@ urlpatterns = [
     path('crear_tarea/', views.crearTarea, name='crearTarea'),
     path('modificar_tarea/<int:id>/', views.modificarTarea, name='modificarTarea'),
     path('eliminar_tarea/<int:id>/', views.eliminarTarea, name='eliminarTarea'),
-    path('api/personas/',api_personas,name='api_personas',
-),
+    path('api/personas/', api_personas, name='api_personas'),
+    path('api/grupos/', views.api_grupo, name='api_grupos'),
+    path('api/grupos/crear/', views.api_crear_grupo, name='api_crear_grupo'),
+    path('api/grupos/<int:id>/', views.api_modificar_grupo, name='api_modificar_grupo'),
+    path('api/grupos/<int:id>/eliminar/', views.api_eliminar_grupo, name='api_eliminar_grupo'),
+    path('api/tareas/', views.api_tareas, name='api_tareas'),
+    path('api/tareas/<int:id>/', views.api_tarea_detail, name='api_tarea_detail'),
 ]
 
