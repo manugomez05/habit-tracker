@@ -1,0 +1,16 @@
+{% if error %}
+    <div style="color: red; padding: 10px; background-color: #ffe6e6; border-radius: 5px;">
+        <p><strong>Error:</strong> {{ error }}</p>
+    </div>
+    <a class="button" href="{% url 'home' %}">Volver al Inicio</a>
+{% elif datos_clima %}
+    <div style="padding: 20px; background-color: #f0f8ff; border-radius: 5px; border: 1px solid #87ceeb;">
+        <a class="button" href="{% url 'home' %}">Volver al Inicio</a>
+        <h2>Clima en {{ ciudad }}</h2>
+        <p><strong>Temperatura:</strong> {{ datos_clima.temperatura }}°C</p>
+        <p><strong>Condición:</strong> {{ datos_clima.descripcion|capfirst }}</p>
+        <img src="https://openweathermap.org/img/wn/{{ datos_clima.icono }}@2x.png" alt="Icono del clima" style="width: 80px; height: 80px;">
+    </div>
+{% else %}
+    <p>Cargando información del clima...</p>
+{% endif %}

@@ -1,5 +1,6 @@
 from django.template import loader
 from django.http import HttpResponse
+import requests
 from .models import Tarea, Persona, Grupo
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import TareaForm, PersonaForm, GrupoForm
@@ -12,10 +13,33 @@ def home(request):
     personas = Persona.objects.all()
     grupos = Grupo.objects.all()
     tareas = Tarea.objects.all()
+    
+    # Obtener datos del clima de Mendoza
+    datos_clima = None
+    error_clima = None
+    ciudad = 'Mendoza'
+    api_key = "fcb21c268804bdf1d4be1ec680fbb2c4"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={api_key}&units=metric&lang=es"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            datos = response.json()
+            if 'main' in datos and 'weather' in datos:
+                datos_clima = {
+                    'temperatura': datos['main']['temp'],
+                    'descripcion': datos['weather'][0]['description'],
+                    'icono': datos['weather'][0]['icon'],
+                }
+    except Exception as e:
+        error_clima = str(e)
+    
     return render(request, 'home.html', {
         'personas': personas,
         'grupos': grupos,
         'tareas': tareas,
+        'datos_clima': datos_clima,
+        'error_clima': error_clima,
+        'ciudad': ciudad,
     })
 
 def persona(request):
@@ -255,3 +279,29 @@ def api_tarea_detail(request, id):
     tarea.delete()
     return Response(status=204)
 
+def clima(request):
+    ciudad = 'Mendoza'
+    datos_clima = None
+    error = None
+    
+    api_key = "fcb21c268804bdf1d4be1ec680fbb2c4"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={api_key}&units=metric&lang=es"
+    try:
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            datos = response.json()
+            if 'main' in datos and 'weather' in datos:
+                datos_clima = {
+                    'temperatura': datos['main']['temp'],
+                    'descripcion': datos['weather'][0]['description'],
+                    'icono': datos['weather'][0]['icon'],
+                }
+            else:
+                error = "No se pudieron obtener los datos del clima."
+        else:
+            error = f"Error al obtener el clima (código {response.status_code})"
+    except Exception as e:
+        error = f"Error de conexión: {str(e)}"
+    
+    return render(request, 'clima.html', {'datos_clima': datos_clima, 'ciudad': ciudad, 'error': error})

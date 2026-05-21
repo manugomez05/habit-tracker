@@ -26,6 +26,7 @@
                 <p>Administrar grupos y sus miembros.</p>
             </div>
             <a class="button" href="{% url 'crearGrupo' %}">Crear grupo</a>
+            <a class="button" href="{% url 'home' %}">Volver al Inicio</a>
         </div>
         <ul class="group-list">
             {% for grupo in grupos %}

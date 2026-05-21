@@ -27,6 +27,7 @@
                 <p>Administra tus tareas y objetivos.</p>
             </div>
             <a class="button" href="{% url 'crearTarea' %}">Crear tarea</a>
+            <a class="button" href="{% url 'home' %}">Volver al Inicio</a>
         </div>
         <ul class="tarea-list">
             {% for tarea in tareas %}

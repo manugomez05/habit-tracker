@@ -66,6 +66,19 @@
                     {% endfor %}
                 </ul>
             </div>
+
+            <div class="card">
+                <h3>Clima en {{ ciudad }}</h3>
+                {% if error_clima %}
+                    <p style="color: #ef4444;">No disponible</p>
+                {% elif datos_clima %}
+                    <p style="margin: 10px 0;"><strong>Temperatura:</strong> {{ datos_clima.temperatura }}°C</p>
+                    <p style="margin: 10px 0;"><strong>Condición:</strong> {{ datos_clima.descripcion|capfirst }}</p>
+                    <img src="https://openweathermap.org/img/wn/{{ datos_clima.icono }}@2x.png" alt="Icono del clima" style="width: 60px; height: 60px;">
+                {% else %}
+                    <p class="empty">Cargando...</p>
+                {% endif %}
+            </div>
         </div>
     </section>
 </body>

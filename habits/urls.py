@@ -26,5 +26,6 @@ urlpatterns = [
     path('api/grupos/<int:id>/eliminar/', views.api_eliminar_grupo, name='api_eliminar_grupo'),
     path('api/tareas/', views.api_tareas, name='api_tareas'),
     path('api/tareas/<int:id>/', views.api_tarea_detail, name='api_tarea_detail'),
+    path('clima/', views.clima, name='clima'),
 ]
-
+  
