@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Grupo</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; padding: 0; color: #333; }
+        .page { max-width: 600px; margin: 32px auto; padding: 24px; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-radius: 12px; }
+        h1 { margin-top: 0; }
+        form { display: grid; gap: 16px; }
+        .buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+        .button { display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; background: #2563eb; color: white; text-decoration: none; cursor: pointer; }
+        .button.light { background: #e5e7eb; color: #111827; }
+    </style>
+</head>
+<body>
+    <section class="page">
+        <h1>Modificar Grupo</h1>
+        <p>Actualiza el nombre del grupo o la selección de miembros.</p>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="buttons">
+                <button class="button" type="submit">Guardar cambios</button>
+                <a class="button light" href="{% url 'lista_grupos' %}">Cancelar</a>
+            </div>
+        </form>
+    </section>
+</body>
+</html>
