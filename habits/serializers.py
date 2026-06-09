@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Persona, Grupo, Tarea
+from .models_base import Persona, Grupo, Tarea
 
 class PersonaSerializer(serializers.ModelSerializer):
 
