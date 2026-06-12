@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Tarea</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css">
     <style>
         body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; padding: 0; color: #333; }
         .page { max-width: 600px; margin: 32px auto; padding: 24px; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-radius: 12px; }
@@ -12,20 +13,79 @@
         .buttons { display: flex; gap: 12px; flex-wrap: wrap; }
         .button { display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; background: #2563eb; color: white; text-decoration: none; cursor: pointer; }
         .button.light { background: #e5e7eb; color: #111827; }
+        label { font-weight: 600; }
+        input[type="text"], input[type="date"], textarea { padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
+        input[type="text"]:focus, input[type="date"]:focus, textarea:focus { border-color: #2563eb; outline: none; }
+        textarea { resize: vertical; font-family: inherit; }
+        [type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+        .select2-container { width: 100% !important; }
+        .select2-selection { border: 1px solid #d1d5db !important; border-radius: 8px !important; }
+        .select2-selection:focus { border-color: #2563eb !important; }
     </style>
 </head>
 <body>
     <section class="page">
         <h1>Modificar Tarea</h1>
         <p>Actualiza los datos de la tarea.</p>
-        <form method="POST">
+        <form method="POST" novalidate>
             {% csrf_token %}
-            {{ form.as_p }}
+            
+            <div>
+                <label for="{{ form.titulo.id_for_label }}">Título <span style="color: #dc2626;">*</span></label>
+                {{ form.titulo }}
+                {% if form.titulo.errors %}
+                    <small style="color: #dc2626;">{{ form.titulo.errors.0 }}</small>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.descripcion.id_for_label }}">Descripción</label>
+                {{ form.descripcion }}
+                {% if form.descripcion.errors %}
+                    <small style="color: #dc2626;">{{ form.descripcion.errors.0 }}</small>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.fecha_vencimiento.id_for_label }}">Fecha de Vencimiento</label>
+                {{ form.fecha_vencimiento }}
+                {% if form.fecha_vencimiento.errors %}
+                    <small style="color: #dc2626;">{{ form.fecha_vencimiento.errors.0 }}</small>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.completada.id_for_label }}">Completada</label>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                    {{ form.completada }}
+                    <label for="{{ form.completada.id_for_label }}" style="margin: 0; font-weight: 400; font-size: 0.95rem;">Marcar como completada</label>
+                </div>
+            </div>
+
+            <div>
+                <label for="{{ form.personas.id_for_label }}">Asignar a Personas (búsqueda)</label>
+                {{ form.personas }}
+                {% if form.personas.errors %}
+                    <small style="color: #dc2626;">{{ form.personas.errors.0 }}</small>
+                {% endif %}
+            </div>
+
             <div class="buttons">
                 <button class="button" type="submit">Guardar cambios</button>
                 <a class="button light" href="{% url 'lista_tareas' %}">Cancelar</a>
             </div>
         </form>
     </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_personas').select2({
+                placeholder: 'Busca y selecciona personas',
+                allowClear: true
+            });
+        });
+    </script>
 </body>
 </html>

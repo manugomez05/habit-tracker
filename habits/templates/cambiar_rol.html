@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Rol | Habit Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; padding: 0; color: #333; }
+        .page { max-width: 1100px; margin: 32px auto; padding: 24px; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-radius: 12px; }
+        .header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+        .card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 14px; padding: 20px; max-width: 500px; margin: 0 auto; }
+        .card h3 { margin-top: 0; }
+        .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+        .field label { font-weight: bold; font-size: 14px; }
+        .field input, .field select { padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; outline: none; background: white; }
+        .field input:focus, .field select:focus { border-color: #2563eb; }
+        .button { display: inline-block; width: 100%; padding: 10px 16px; border: none; border-radius: 8px; background: #2563eb; color: white; text-decoration: none; cursor: pointer; font-size: 15px; box-sizing: border-box; }
+        .button:hover { background: #1d4ed8; }
+        .error { background: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+        .success { background: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+        .link { text-align: center; margin-top: 16px; font-size: 14px; }
+        .link a { color: #2563eb; text-decoration: none; }
+        .link a:hover { text-decoration: underline; }
+        .user-info { display: flex; align-items: center; gap: 16px; }
+        .user-name { font-size: 14px; color: #666; }
+        .logout-btn { background: #dc2626; display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; color: white; text-decoration: none; cursor: pointer; font-size: 14px; }
+        .logout-btn:hover { background: #b91c1c; }
+    </style>
+</head>
+<body>
+    <section class="page">
+        <div class="header">
+            <div>
+                <h1>Cambiar Rol de Persona</h1>
+                <p>Asigna un nuevo rol a cualquier persona registrada.</p>
+            </div>
+            <div class="user-info">
+                <span class="user-name">{{ user.first_name|default:user.username }}</span>
+                <a href="{% url 'logout' %}" class="logout-btn">Cerrar sesión</a>
+            </div>
+        </div>
+
+        <div class="card">
+            {% if success %}
+                <div class="success">
+                    ✓ {{ success }}
+                </div>
+            {% endif %}
+
+            {% if error %}
+                <div class="error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="field">
+                    <label for="id_persona">Persona <span style="color: #dc2626;">*</span></label>
+                    {{ form.persona }}
+                    {% if form.persona.errors %}
+                        <ul class="error" style="list-style: none; padding: 0; margin: 6px 0;">
+                            {% for error in form.persona.errors %}
+                                <li style="color: #b91c1c; font-size: 12px;">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="field">
+                    <label for="id_rol">Nuevo Rol <span style="color: #dc2626;">*</span></label>
+                    {{ form.rol }}
+                    {% if form.rol.errors %}
+                        <ul class="error" style="list-style: none; padding: 0; margin: 6px 0;">
+                            {% for error in form.rol.errors %}
+                                <li style="color: #b91c1c; font-size: 12px;">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="button">Cambiar Rol</button>
+            </form>
+
+            <div class="link">
+                <a href="{% url 'home' %}">Volver al inicio</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

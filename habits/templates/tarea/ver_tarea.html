@@ -12,6 +12,11 @@
         .data-row { margin-bottom: 12px; }
         .label { display: block; font-size: 0.95rem; color: #6b7280; margin-bottom: 4px; }
         .value { font-size: 1rem; font-weight: 600; }
+        .persons-list { list-style: none; padding: 0; margin: 0; }
+        .persons-list li { padding: 6px 0; }
+        .status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 0.9rem; }
+        .status.completada { background: #dcfce7; color: #166534; }
+        .status.pendiente { background: #fef3c7; color: #92400e; }
         .buttons { display: flex; gap: 12px; flex-wrap: wrap; }
         .button { display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; color: white; text-decoration: none; cursor: pointer; }
         .button.primary { background: #2563eb; }
@@ -32,8 +37,30 @@
                 <span class="value">{{ tarea.descripcion }}</span>
             </div>
             <div class="data-row">
-                <span class="label">Grupo</span>
-                <span class="value">{{ tarea.grupo.nombre }}</span>
+                <span class="label">Estado</span>
+                {% if tarea.completada %}
+                    <span class="status completada">✓ Completada</span>
+                {% else %}
+                    <span class="status pendiente">⧖ Pendiente</span>
+                {% endif %}
+            </div>
+            {% if tarea.fecha_vencimiento %}
+                <div class="data-row">
+                    <span class="label">Fecha de Vencimiento</span>
+                    <span class="value">{{ tarea.fecha_vencimiento|date:"d/m/Y" }}</span>
+                </div>
+            {% endif %}
+            <div class="data-row">
+                <span class="label">Asignada a</span>
+                {% if tarea.personas.all %}
+                    <ul class="persons-list">
+                        {% for persona in tarea.personas.all %}
+                            <li>• {{ persona.nombre }} {{ persona.apellido }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span class="value">Sin asignar</span>
+                {% endif %}
             </div>
             <div class="data-row">
                 <span class="label">Fecha de Creación</span>

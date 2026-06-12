@@ -29,7 +29,17 @@
         <ul class="list">
             {% for persona in personas %}
                 <li class="item">
-                    <div class="item-title">#{{ persona.id }} · {{ persona.nombre }} {{ persona.apellido }}</div>
+                    <div>
+                        <div class="item-title">#{{ persona.id }} · {{ persona.nombre }} {{ persona.apellido }}</div>
+                        <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                            {% if persona.rol %}
+                                <span>Rol: <strong>{{ persona.rol.nombre }}</strong></span> | 
+                            {% endif %}
+                            {% if persona.usuario.user.email %}
+                                <span>Email: <strong>{{ persona.usuario.user.email }}</strong></span>
+                            {% endif %}
+                        </div>
+                    </div>
                     <div class="actions">
                         <a class="button light" href="{% url 'verPersona' persona.id %}">Ver</a>
                         <a class="button light" href="{% url 'modificarPersona' persona.id %}">Editar</a>
