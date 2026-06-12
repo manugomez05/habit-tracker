@@ -41,6 +41,9 @@
             <div class="card">
                 <h3>Personas</h3>
                  <a class="button" href="{% url 'lista_personas' %}">Ver Personas</a>
+                 {% if puede_gestionar_personas %}
+                    <a class="button" href="{% url 'crearPersona' %}">Crear Persona</a>
+                 {% endif %}
                 <ul>
                     {% for persona in personas %}
                         <li>
@@ -61,6 +64,12 @@
             <div class="card">
                 <h3>Tareas</h3>
                  <a class="button" href="{% url 'lista_tareas' %}">Ver Tareas</a>
+                 {% if puede_gestionar_tareas %}
+                    <a class="button" href="{% url 'crearTarea' %}">Crear Tarea</a>
+                 {% endif %}
+                 {% if es_admin %}
+                    <a class="button" href="{% url 'cambiar_rol' %}">Cambiar Roles</a>
+                 {% endif %}
                 <ul>
                     {% for tarea in tareas %}
                         <li>

@@ -50,8 +50,13 @@
         </div>
         <div class="buttons">
             <a class="button light" href="{% url 'lista_personas' %}">Volver</a>
-            <a class="button primary" href="{% url 'modificarPersona' persona.id %}">Editar</a>
-            <a class="button danger" href="{% url 'eliminarPersona' persona.id %}">Eliminar</a>
+            {% if es_admin %}
+                {% if not persona.usuario %}
+                    <a class="button primary" href="{% url 'crearUsuarioPersona' persona.id %}">Crear Usuario</a>
+                {% endif %}
+                <a class="button primary" href="{% url 'modificarPersona' persona.id %}">Editar</a>
+                <a class="button danger" href="{% url 'eliminarPersona' persona.id %}">Eliminar</a>
+            {% endif %}
         </div>
     </section>
 </body>

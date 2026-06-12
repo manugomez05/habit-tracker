@@ -23,7 +23,9 @@
                 <h1>Personas</h1>
                 <p>Gestiona las personas registradas.</p>
             </div>
-            <a class="button" href="{% url 'crearPersona' %}">Crear Persona</a>
+            {% if puede_gestionar_personas %}
+                <a class="button" href="{% url 'crearPersona' %}">Crear Persona</a>
+            {% endif %}
             <a class="button" href="{% url 'home' %}">Volver al Inicio</a>
         </div>
         <ul class="list">
@@ -42,8 +44,13 @@
                     </div>
                     <div class="actions">
                         <a class="button light" href="{% url 'verPersona' persona.id %}">Ver</a>
-                        <a class="button light" href="{% url 'modificarPersona' persona.id %}">Editar</a>
-                        <a class="button light" href="{% url 'eliminarPersona' persona.id %}">Eliminar</a>
+                        {% if es_admin %}
+                            {% if not persona.usuario %}
+                                <a class="button light" href="{% url 'crearUsuarioPersona' persona.id %}">Crear Usuario</a>
+                            {% endif %}
+                            <a class="button light" href="{% url 'modificarPersona' persona.id %}">Editar</a>
+                            <a class="button light" href="{% url 'eliminarPersona' persona.id %}">Eliminar</a>
+                        {% endif %}
                     </div>
                 </li>
             {% empty %}

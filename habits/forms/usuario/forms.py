@@ -55,3 +55,28 @@ class CambiarRolForm(forms.Form):
         label='Nuevo Rol',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
+
+
+class CrearUsuarioPersonaForm(UserCreationForm):
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={
+        'placeholder': 'Email'
+    }))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': 'Usuario'}),
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '').strip().lower()
+        if email and User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Este email ya esta registrado.')
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username', '').strip()
+        if username and User.objects.filter(username=username).exists():
+            raise forms.ValidationError('Este usuario ya existe.')
+        return username
