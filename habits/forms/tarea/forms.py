@@ -1,5 +1,6 @@
 from django import forms
 from ...models.tarea.model import Tarea
+from ...models.persona.model import Persona
 
 
 def persona_puede_resolver_dificultad(persona, dificultad):
@@ -11,6 +12,18 @@ def persona_puede_resolver_dificultad(persona, dificultad):
     if dificultad == Tarea.DIFICULTAD_ALTA:
         return rol == 'Administrador'
     return False
+
+
+def roles_permitidos_por_dificultad(dificultad):
+    if dificultad == Tarea.DIFICULTAD_MEDIA:
+        return ['Lider', 'Administrador']
+    if dificultad == Tarea.DIFICULTAD_ALTA:
+        return ['Administrador']
+    return ['Integrante', 'Lider', 'Administrador']
+
+
+def personas_disponibles_por_dificultad(dificultad):
+    return Persona.objects.filter(rol__nombre__in=roles_permitidos_por_dificultad(dificultad)).order_by('nombre', 'apellido')
 
 
 def validar_personas_por_dificultad(cleaned_data):
@@ -54,13 +67,13 @@ class TareaFormCrear(forms.ModelForm):
             'titulo': forms.TextInput(attrs={'placeholder': 'Titulo de la tarea'}),
             'descripcion': forms.Textarea(attrs={'placeholder': 'Descripcion', 'rows': 4}),
             'fecha_vencimiento': forms.DateInput(attrs={'type': 'date'}),
-            'dificultad': forms.Select(),
+            'dificultad': forms.Select(attrs={'class': 'form-select'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from ...models.persona.model import Persona
-        self.fields['personas'].queryset = Persona.objects.all()
+        dificultad = self.data.get('dificultad') or self.initial.get('dificultad') or Tarea.DIFICULTAD_BAJA
+        self.fields['personas'].queryset = personas_disponibles_por_dificultad(dificultad)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -91,14 +104,19 @@ class TareaFormEditar(forms.ModelForm):
             'titulo': forms.TextInput(attrs={'placeholder': 'Titulo de la tarea'}),
             'descripcion': forms.Textarea(attrs={'placeholder': 'Descripcion', 'rows': 4}),
             'fecha_vencimiento': forms.DateInput(attrs={'type': 'date'}),
-            'dificultad': forms.Select(),
+            'dificultad': forms.Select(attrs={'class': 'form-select'}),
             'completada': forms.CheckboxInput(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from ...models.persona.model import Persona
-        self.fields['personas'].queryset = Persona.objects.all()
+        dificultad = (
+            self.data.get('dificultad')
+            or self.initial.get('dificultad')
+            or getattr(self.instance, 'dificultad', None)
+            or Tarea.DIFICULTAD_BAJA
+        )
+        self.fields['personas'].queryset = personas_disponibles_por_dificultad(dificultad)
 
     def clean(self):
         cleaned_data = super().clean()

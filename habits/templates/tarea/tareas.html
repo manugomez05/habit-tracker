@@ -50,8 +50,14 @@
                             {% if tarea.fecha_vencimiento %}
                                 <span>Vence: {{ tarea.fecha_vencimiento|date:"d/m/Y" }}</span>
                             {% endif %}
+                            <span>Dificultad: {{ tarea.get_dificultad_display }}</span>
                             {% if tarea.personas.all %}
                                 <span>Asignadas a {{ tarea.personas.count }} persona{{ tarea.personas.count|pluralize }}</span>
+                            {% endif %}
+                            {% if tarea.google_calendar_event_id %}
+                                <span>Agendada en Google Calendar</span>
+                            {% elif tarea.google_calendar_sync_error %}
+                                <span>Calendar: {{ tarea.google_calendar_sync_error|truncatechars:35 }}</span>
                             {% endif %}
                         </div>
                     </div>

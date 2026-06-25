@@ -4,8 +4,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from ...forms.tarea.forms import TareaFormCrear, TareaFormEditar
+from ...forms.tarea.forms import TareaFormCrear, TareaFormEditar, personas_disponibles_por_dificultad
 from ...permissions import es_administrador, puede_gestionar_tareas
+from ...services.google_calendar import sincronizar_tarea_con_google_calendar
 
 
 def usuario_tiene_tarea_asignada(user, tarea):
@@ -62,7 +63,8 @@ def crearTarea(request):
     if request.method == 'POST':
         form = TareaFormCrear(request.POST)
         if form.is_valid():
-            form.save()
+            tarea = form.save()
+            sincronizar_tarea_con_google_calendar(tarea)
             return redirect('lista_tareas')
     else:
         form = TareaFormCrear()
@@ -80,7 +82,8 @@ def modificarTarea(request, id):
     if request.method == 'POST':
         form = TareaFormEditar(request.POST, instance=tarea)
         if form.is_valid():
-            form.save()
+            tarea = form.save()
+            sincronizar_tarea_con_google_calendar(tarea)
             return redirect('lista_tareas')
     else:
         form = TareaFormEditar(instance=tarea)
@@ -113,3 +116,20 @@ def eliminarTarea(request, id):
 
     context = {'tarea': tarea}
     return render(request, 'tarea/eliminar_tarea.html', context)
+
+
+@login_required(login_url='login')
+def personasPorDificultad(request):
+    if not puede_gestionar_tareas(request.user):
+        return JsonResponse({'error': 'No tienes permiso para acceder a esta pagina'}, status=403)
+
+    dificultad = request.GET.get('dificultad', Tarea.DIFICULTAD_BAJA)
+    personas = personas_disponibles_por_dificultad(dificultad)
+    data = [
+        {
+            'id': persona.id,
+            'text': f'{persona.nombre} {persona.apellido} - {persona.rol.nombre if persona.rol else "Sin rol"}',
+        }
+        for persona in personas
+    ]
+    return JsonResponse({'personas': data})

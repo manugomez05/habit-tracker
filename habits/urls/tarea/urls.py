@@ -1,5 +1,5 @@
 from django.urls import path
-from ...views.tarea.views import tareas, verTarea, modificarTarea, crearTarea, eliminarTarea, completarTarea
+from ...views.tarea.views import tareas, verTarea, modificarTarea, crearTarea, eliminarTarea, completarTarea, personasPorDificultad
 
 urlpatterns = [
     path('tareas/', tareas, name='lista_tareas'),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('crear_tarea/', crearTarea, name='crearTarea'),
     path('eliminar_tarea/<int:id>/', eliminarTarea, name='eliminarTarea'),
     path('completar_tarea/<int:id>/', completarTarea, name='completarTarea'),
+    path('personas_por_dificultad/', personasPorDificultad, name='personasPorDificultad'),
 ]

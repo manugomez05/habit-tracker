@@ -14,10 +14,11 @@
         .button { display: inline-block; padding: 10px 16px; border: none; border-radius: 8px; background: #2563eb; color: white; text-decoration: none; cursor: pointer; }
         .button.light { background: #e5e7eb; color: #111827; }
         label { font-weight: 600; }
-        input[type="text"], input[type="date"], textarea { padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
-        input[type="text"]:focus, input[type="date"]:focus, textarea:focus { border-color: #2563eb; outline: none; }
+        input[type="text"], input[type="date"], textarea, select { padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
+        input[type="text"]:focus, input[type="date"]:focus, textarea:focus, select:focus { border-color: #2563eb; outline: none; }
         textarea { resize: vertical; font-family: inherit; }
         [type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+        .help { color: #6b7280; font-size: 0.9rem; margin-top: 6px; }
         .select2-container { width: 100% !important; }
         .select2-selection { border: 1px solid #d1d5db !important; border-radius: 8px !important; }
         .select2-selection:focus { border-color: #2563eb !important; }
@@ -29,6 +30,9 @@
         <p>Actualiza los datos de la tarea.</p>
         <form method="POST" novalidate>
             {% csrf_token %}
+            {% if form.non_field_errors %}
+                <small style="color: #dc2626;">{{ form.non_field_errors.0 }}</small>
+            {% endif %}
             
             <div>
                 <label for="{{ form.titulo.id_for_label }}">Título <span style="color: #dc2626;">*</span></label>
@@ -51,6 +55,15 @@
                 {{ form.fecha_vencimiento }}
                 {% if form.fecha_vencimiento.errors %}
                     <small style="color: #dc2626;">{{ form.fecha_vencimiento.errors.0 }}</small>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.dificultad.id_for_label }}">Dificultad</label>
+                {{ form.dificultad }}
+                <div id="dificultad-ayuda" class="help">Dificultad 1: cualquier rol. Dificultad 2: Lider o Administrador. Dificultad 3: solo Administrador.</div>
+                {% if form.dificultad.errors %}
+                    <small style="color: #dc2626;">{{ form.dificultad.errors.0 }}</small>
                 {% endif %}
             </div>
 
@@ -84,6 +97,18 @@
             $('#id_personas').select2({
                 placeholder: 'Busca y selecciona personas',
                 allowClear: true
+            });
+
+            $('#id_dificultad').on('change', function() {
+                const dificultad = $(this).val();
+                $.get("{% url 'personasPorDificultad' %}", { dificultad: dificultad }, function(data) {
+                    const personas = $('#id_personas');
+                    personas.empty();
+                    data.personas.forEach(function(persona) {
+                        personas.append(new Option(persona.text, persona.id, false, false));
+                    });
+                    personas.val(null).trigger('change');
+                });
             });
         });
     </script>

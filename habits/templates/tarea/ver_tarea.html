@@ -51,6 +51,10 @@
                 </div>
             {% endif %}
             <div class="data-row">
+                <span class="label">Dificultad</span>
+                <span class="value">{{ tarea.get_dificultad_display }}</span>
+            </div>
+            <div class="data-row">
                 <span class="label">Asignada a</span>
                 {% if tarea.personas.all %}
                     <ul class="persons-list">
@@ -65,6 +69,16 @@
             <div class="data-row">
                 <span class="label">Fecha de Creación</span>
                 <span class="value">{{ tarea.fecha_creacion|date:"d/m/Y H:i" }}</span>
+            </div>
+            <div class="data-row">
+                <span class="label">Google Calendar</span>
+                {% if tarea.google_calendar_event_id %}
+                    <span class="value">Agendada</span>
+                {% elif tarea.google_calendar_sync_error %}
+                    <span class="value">{{ tarea.google_calendar_sync_error }}</span>
+                {% else %}
+                    <span class="value">Sin sincronizar</span>
+                {% endif %}
             </div>
         </div>
         <div class="buttons">

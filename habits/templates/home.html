@@ -82,6 +82,7 @@
                             {% if tarea.fecha_vencimiento %}
                                 <br><small style="color: #666;">Vence: {{ tarea.fecha_vencimiento|date:"d/m/Y" }}</small>
                             {% endif %}
+                            <br><small style="color: #666;">Dificultad: {{ tarea.get_dificultad_display }}</small>
                         </li>
                     {% empty %}
                         <li class="empty">No hay tareas registradas.</li>
